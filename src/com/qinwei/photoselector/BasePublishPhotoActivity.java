@@ -4,7 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,8 +45,32 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 	 */
 	protected ArrayList<String> uploads = new ArrayList<String>();
 	private Uri imageUri;
+	private PhotoSelectReceiver receiver;
 
 	public static final int REQUEST_OPEN_CAMERA = 10;
+
+	public class PhotoSelectReceiver extends BroadcastReceiver {
+
+		public static final String ACTION_SELECT_PHOTO = "android.intent.action.SELECT_PHOTO";
+
+		/**
+		 * @param context
+		 * @param intent
+		 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
+		 *      android.content.Intent)
+		 */
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent != null && intent.getAction().equals(ACTION_SELECT_PHOTO)) {
+				ArrayList<PhotoEntity> photos = (ArrayList<PhotoEntity>) intent.getSerializableExtra(Constants.KEY_PHOTOS);
+				if (photos == null) {
+					photos = new ArrayList<PhotoEntity>();
+				}
+				notifyDataChanged(photos);
+			}
+		}
+
+	}
 
 	@Override
 	public void initializeView() {
@@ -51,8 +79,10 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 
 	@Override
 	protected void initializeData() {
-		modules.add("");
-		mAdapter.notifyDataSetChanged();
+		receiver = new PhotoSelectReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(PhotoSelectReceiver.ACTION_SELECT_PHOTO);
+		registerReceiver(receiver, filter);
 	}
 
 	/**
@@ -67,19 +97,6 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 		modules.add("");
 		modules.addAll(0, photos);
 		mAdapter.notifyDataSetChanged();
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		if (intent.getSerializableExtra(Constants.KEY_PHOTOS) != null) {
-			// 获取选择图片集合
-			photos = (ArrayList<PhotoEntity>) intent.getSerializableExtra(Constants.KEY_PHOTOS);
-			if (photos == null) {
-				photos = new ArrayList<PhotoEntity>();
-			}
-			notifyDataChanged(photos);
-		}
-		super.onNewIntent(intent);
 	}
 
 	/**
@@ -234,9 +251,9 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 	@Override
 	protected void recoveryState(Bundle saveInstance) {
 		photos = (ArrayList<PhotoEntity>) saveInstance.getSerializable(Constants.KEY_SELECT_PHOTOS);
-		Log.e("wei", saveInstance+","+photos.size());
+		Log.e("wei", saveInstance + "," + photos.size());
 		modules.add("");
-		modules.addAll(0,photos);
+		modules.addAll(0, photos);
 		mAdapter.notifyDataSetChanged();
 		super.recoveryState(saveInstance);
 	}
@@ -249,6 +266,16 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(Constants.KEY_SELECT_PHOTOS, photos);
 		super.onSaveInstanceState(outState);
+	}
+
+	/**
+	 * 
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(receiver);
+		super.onDestroy();
 	}
 
 }

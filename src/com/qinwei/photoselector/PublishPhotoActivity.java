@@ -46,6 +46,7 @@ public class PublishPhotoActivity extends BasePublishPhotoActivity implements On
 
 	@Override
 	protected void initializeData() {
+		super.initializeData();
 		modules.add("");
 		mAdapter.notifyDataSetChanged();
 	}

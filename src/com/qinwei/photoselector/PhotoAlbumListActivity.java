@@ -29,6 +29,7 @@ public class PhotoAlbumListActivity extends BaseGridViewActivity {
 
 	@Override
 	protected void initializeData() {
+		MyApplication.getInstance().addToTasks(this);
 		List<PhotoAlbum> imagesBucketList = AlbumHelper.getInstance(getApplicationContext()).getImagesBucketList(false);
 		modules.addAll(imagesBucketList);
 		mAdapter.notifyDataSetChanged();

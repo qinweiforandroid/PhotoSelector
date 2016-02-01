@@ -42,7 +42,7 @@ public class PhotoListActivity extends BaseGridViewActivity implements OnClickLi
 
 	@Override
 	protected void initializeData() {
-
+		MyApplication.getInstance().addToTasks(this);
 		PhotoAlbum album = (PhotoAlbum) getIntent().getSerializableExtra(Constants.KEY_ALBUM_ENTITIES);
 		// 获取选中图片进行回显
 		Serializable serializable = getIntent().getSerializableExtra(Constants.KEY_PHOTOS);
@@ -65,9 +65,12 @@ public class PhotoListActivity extends BaseGridViewActivity implements OnClickLi
 	 */
 	@Override
 	public void onClick(View v) {
-		Intent intent = new Intent(this, PublishPhotoActivity.class);
+		Intent intent = new Intent();
 		intent.putExtra(Constants.KEY_PHOTOS, selectedCache);
-		startActivity(intent);
+		//设置广播行为
+		intent.setAction(BasePublishPhotoActivity.PhotoSelectReceiver.ACTION_SELECT_PHOTO);
+		sendBroadcast(intent);
+		MyApplication.getInstance().clearTasks();
 	}
 
 	@Override
