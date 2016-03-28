@@ -10,4 +10,5 @@ public class Constants {
 	public static final String KEY_ALBUM_ENTITIES = "key_album_entities";
 	public static final String KEY_PHOTOS = "key_photos";
 	public static final String KEY_SELECT_PHOTOS = "key_select_photos";
+	public static final int MAX_SELECT_SIZE = 9;
 }

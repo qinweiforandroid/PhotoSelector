@@ -4,11 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -26,6 +25,7 @@ import com.qinwei.photoselector.lib.ActionSheet;
 import com.qinwei.photoselector.lib.ActionSheet.ActionSheetListener;
 import com.qinwei.photoselector.lib.BaseGridViewActivity;
 import com.qinwei.photoselector.utils.Constants;
+import com.qinwei.photoselector.utils.PhotoDisplayManager;
 
 /**
  * 图片选择器入口基类
@@ -45,44 +45,13 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 	 */
 	protected ArrayList<String> uploads = new ArrayList<String>();
 	private Uri imageUri;
-	private PhotoSelectReceiver receiver;
 
 	public static final int REQUEST_OPEN_CAMERA = 10;
-
-	public class PhotoSelectReceiver extends BroadcastReceiver {
-
-		public static final String ACTION_SELECT_PHOTO = "android.intent.action.SELECT_PHOTO";
-
-		/**
-		 * @param context
-		 * @param intent
-		 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
-		 *      android.content.Intent)
-		 */
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (intent != null && intent.getAction().equals(ACTION_SELECT_PHOTO)) {
-				ArrayList<PhotoEntity> photos = (ArrayList<PhotoEntity>) intent.getSerializableExtra(Constants.KEY_PHOTOS);
-				if (photos == null) {
-					photos = new ArrayList<PhotoEntity>();
-				}
-				notifyDataChanged(photos);
-			}
-		}
-
-	}
+	private static final int REQUEST_OPEN_PIC = 11;
 
 	@Override
 	public void initializeView() {
 		super.initializeView();
-	}
-
-	@Override
-	protected void initializeData() {
-		receiver = new PhotoSelectReceiver();
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(PhotoSelectReceiver.ACTION_SELECT_PHOTO);
-		registerReceiver(receiver, filter);
 	}
 
 	/**
@@ -103,9 +72,9 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 	 * 打开图片选择器
 	 */
 	public void openPictureSelector() {
-		Intent intent = new Intent(this, PhotoAlbumListActivity.class);
+		Intent intent = new Intent(this, PhotoSelectorActivity.class);
 		intent.putExtra(Constants.KEY_PHOTOS, photos);
-		startActivity(intent);
+		startActivityForResult(intent, REQUEST_OPEN_PIC);
 	}
 
 	/**
@@ -176,6 +145,13 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 				photos.add(photo);
 				notifyDataChanged(photos);
 				break;
+			case REQUEST_OPEN_PIC:
+				photos = (ArrayList<PhotoEntity>) data.getSerializableExtra(Constants.KEY_PHOTOS);
+				if (photos == null) {
+					photos = new ArrayList<PhotoEntity>();
+				}
+				notifyDataChanged(photos);
+				break;
 			default:
 				break;
 			}
@@ -210,10 +186,12 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 		return convertView;
 	}
 
-	class Holder {
+	class Holder implements OnClickListener {
 
 		private ImageView mPublishPhotoItemIconImg;
+		private ImageView mPublishPhotoItemDeleteImg;
 		private String tempUri;
+		private int position;
 
 		/**
 		 * 描述
@@ -222,6 +200,8 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 		 */
 		public void initializeView(View convertView) {
 			mPublishPhotoItemIconImg = (ImageView) convertView.findViewById(R.id.mPublishPhotoItemIconImg);
+			mPublishPhotoItemDeleteImg = (ImageView) convertView.findViewById(R.id.mPublishPhotoItemDeleteImg);
+			mPublishPhotoItemDeleteImg.setOnClickListener(this);
 		}
 
 		/**
@@ -230,24 +210,43 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 		 * @param convertView
 		 */
 		public void initializeData(int position) {
+			this.position = position;
 			if (position == modules.size() - 1) {
-				imageLoader.displayImage("drawable://" + R.drawable.icon_addpic_unfocused, mPublishPhotoItemIconImg, options);
+				mPublishPhotoItemDeleteImg.setVisibility(View.GONE);
+				PhotoDisplayManager.getInstance().displayImage(R.drawable.icon_addpic_unfocused, mPublishPhotoItemIconImg);
 			} else {
+				mPublishPhotoItemDeleteImg.setVisibility(View.VISIBLE);
 				PhotoEntity photo = (PhotoEntity) modules.get(position);
 				if (photo.thumbnailPath != null && new File(photo.thumbnailPath).exists()) {
 					tempUri = "file:///" + photo.thumbnailPath;
 				} else {
 					tempUri = "file:///" + photo.imagePath;
 				}
-				imageLoader.displayImage(tempUri, mPublishPhotoItemIconImg, options);
+				PhotoDisplayManager.getInstance().displayImage(tempUri, mPublishPhotoItemIconImg);
+			}
+		}
+
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.mPublishPhotoItemDeleteImg:
+				new AlertDialog.Builder(BasePublishPhotoActivity.this).setMessage("您要刪除此图片吗?")
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								photos.remove(position);
+								modules.remove(position);
+								mAdapter.notifyDataSetChanged();
+							}
+						}).setNegativeButton("取消", null).create().show();
+				break;
+			default:
+				break;
 			}
 		}
 	}
 
-	/**
-	 * @param saveInstance
-	 * @see com.qinwei.photoselector.lib.BaseActivity#recoveryState(android.os.Bundle)
-	 */
 	@Override
 	protected void recoveryState(Bundle saveInstance) {
 		photos = (ArrayList<PhotoEntity>) saveInstance.getSerializable(Constants.KEY_SELECT_PHOTOS);
@@ -274,7 +273,6 @@ public abstract class BasePublishPhotoActivity extends BaseGridViewActivity {
 	 */
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(receiver);
 		super.onDestroy();
 	}
 

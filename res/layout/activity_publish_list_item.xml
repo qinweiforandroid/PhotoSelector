@@ -14,9 +14,10 @@
         android:src="@drawable/ic_launcher" />
 
     <ImageView
+        android:id="@+id/mPublishPhotoItemDeleteImg"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_gravity="right|top"
-        android:src="@drawable/icon_data_select"
-        android:visibility="gone" />
-</FrameLayout>
+        android:src="@drawable/ic_photo_delete"
+        />
+</FrameLayout>

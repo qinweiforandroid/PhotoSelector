@@ -2,7 +2,6 @@ package com.qinwei.photoselector.lib;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +10,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.qinwei.photoselector.R;
 
-public abstract class BaseGridViewActivity extends BaseActivity implements OnItemClickListener {
+public abstract class BaseGridViewFragment extends BaseFragment implements OnItemClickListener {
 
 	protected GridView gridView;
 	protected ListAdapter mAdapter;
 	protected ArrayList<Object> modules = new ArrayList<Object>();
+
 	@Override
-	public void initializeView() {
-		gridView = (GridView) findViewById(R.id.gridView);
+	public void initializeView(View v) {
+		gridView = (GridView) v.findViewById(R.id.gridView);
 		if (gridView == null) {
 			throw new IllegalArgumentException("you contentView must contains id:generalPullToRefreshLsv");
 		}
@@ -31,7 +28,6 @@ public abstract class BaseGridViewActivity extends BaseActivity implements OnIte
 		gridView.setAdapter(mAdapter);
 		gridView.setOnItemClickListener(this);
 	}
-
 
 	public boolean getPullToRefreshOverScrollEnabled() {
 		return false;

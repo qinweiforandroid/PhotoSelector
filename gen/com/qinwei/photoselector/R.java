@@ -562,42 +562,45 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int as_other_bt_bg=0x7f02000a;
         public static final int bg_transparent=0x7f02000b;
         public static final int ic_launcher=0x7f02000c;
-        public static final int icon_addpic_focused=0x7f02000d;
-        public static final int icon_addpic_unfocused=0x7f02000e;
-        public static final int icon_data_select=0x7f02000f;
-        public static final int icon_queding_focused=0x7f020010;
-        public static final int icon_queding_unfocused=0x7f020011;
-        public static final int icon_quxiao_focused=0x7f020012;
-        public static final int icon_quxiao_unfocused=0x7f020013;
-        public static final int icon_shanchu_focused=0x7f020014;
-        public static final int icon_shanchu_unfocused=0x7f020015;
-        public static final int round_gray_boder_white_bg=0x7f020016;
-        public static final int slt_as_ios7_cancel_bt=0x7f020017;
-        public static final int slt_as_ios7_other_bt_bottom=0x7f020018;
-        public static final int slt_as_ios7_other_bt_middle=0x7f020019;
-        public static final int slt_as_ios7_other_bt_single=0x7f02001a;
-        public static final int slt_as_ios7_other_bt_top=0x7f02001b;
+        public static final int ic_photo_delete=0x7f02000d;
+        public static final int icon_addpic_focused=0x7f02000e;
+        public static final int icon_addpic_unfocused=0x7f02000f;
+        public static final int icon_data_select=0x7f020010;
+        public static final int icon_queding_focused=0x7f020011;
+        public static final int icon_queding_unfocused=0x7f020012;
+        public static final int icon_quxiao_focused=0x7f020013;
+        public static final int icon_quxiao_unfocused=0x7f020014;
+        public static final int icon_shanchu_focused=0x7f020015;
+        public static final int icon_shanchu_unfocused=0x7f020016;
+        public static final int round_gray_boder_white_bg=0x7f020017;
+        public static final int slt_as_ios7_cancel_bt=0x7f020018;
+        public static final int slt_as_ios7_other_bt_bottom=0x7f020019;
+        public static final int slt_as_ios7_other_bt_middle=0x7f02001a;
+        public static final int slt_as_ios7_other_bt_single=0x7f02001b;
+        public static final int slt_as_ios7_other_bt_top=0x7f02001c;
     }
     public static final class id {
-        public static final int action_settings=0x7f070009;
+        public static final int action_settings=0x7f07000b;
         public static final int gridView=0x7f070000;
-        public static final int mPhotoAlbumItemIconImg=0x7f070001;
-        public static final int mPhotoAlbumItemNameLabel=0x7f070002;
-        public static final int mPhotoAlbumItemNumLabel=0x7f070003;
-        public static final int mPhotoDoChoiceBtn=0x7f070004;
-        public static final int mPhotoItemCheckedStateImg=0x7f070006;
-        public static final int mPhotoItemIconImg=0x7f070005;
-        public static final int mPublishCommitBtn=0x7f070007;
-        public static final int mPublishPhotoItemIconImg=0x7f070008;
+        public static final int mPhotoAlbumItemIconImg=0x7f070005;
+        public static final int mPhotoAlbumItemNameLabel=0x7f070006;
+        public static final int mPhotoAlbumItemNumLabel=0x7f070007;
+        public static final int mPhotoContainer=0x7f070001;
+        public static final int mPhotoDoChoiceBtn=0x7f070008;
+        public static final int mPhotoItemCheckedStateImg=0x7f07000a;
+        public static final int mPhotoItemIconImg=0x7f070009;
+        public static final int mPublishCommitBtn=0x7f070002;
+        public static final int mPublishPhotoItemDeleteImg=0x7f070004;
+        public static final int mPublishPhotoItemIconImg=0x7f070003;
     }
     public static final class layout {
-        public static final int activity_album_list=0x7f030000;
-        public static final int activity_album_list_item=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int activity_photo_list=0x7f030003;
-        public static final int activity_photo_list_item=0x7f030004;
-        public static final int activity_publish=0x7f030005;
-        public static final int activity_publish_list_item=0x7f030006;
+        public static final int activity_photo_selector=0x7f030000;
+        public static final int activity_publish=0x7f030001;
+        public static final int activity_publish_list_item=0x7f030002;
+        public static final int fragment_album_list=0x7f030003;
+        public static final int fragment_album_list_item=0x7f030004;
+        public static final int fragment_photo_list=0x7f030005;
+        public static final int fragment_photo_list_item=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f090000;

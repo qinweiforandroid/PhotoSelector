@@ -30,3 +30,6 @@ proguard/
 
 # Android Studio captures folder
 captures/
+.settings/org.eclipse.jdt.core.prefs
+.project
+.classpath

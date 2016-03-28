@@ -25,6 +25,8 @@
         </activity>
         <activity android:name="com.qinwei.photoselector.PhotoListActivity" >
         </activity>
+        <activity android:name="com.qinwei.photoselector.PhotoSelectorActivity" >
+        </activity>
         <activity android:name="com.qinwei.photoselector.PublishPhotoActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" >
