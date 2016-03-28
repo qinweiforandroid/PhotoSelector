@@ -3,10 +3,4 @@
 
 # project image
 项目截图
-![image](https://github.com/qinweiforandroid/PhotoSelector/blob/master/screenshots/photo_select_one.png)
-
-![image](https://github.com/qinweiforandroid/PhotoSelector/blob/master/screenshots/photo_select_two.png)
-
-![image](https://github.com/qinweiforandroid/PhotoSelector/blob/master/screenshots/photo_select_three.png)
-
-![image](https://github.com/qinweiforandroid/PhotoSelector/blob/master/screenshots/photo_select_four.png)
+![image](http://pan.baidu.com/s/1skZwBlb)
